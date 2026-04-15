@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meeter — IIT Kharagpur</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <section id="screen-auth" class="screen active" aria-labelledby="auth-title">
+      <div class="auth-box">
+        <h1 id="auth-title" class="meeter-logo">meeter</h1>
+        <p id="auth-description" class="auth-tagline">Schedule 100% anonymous meets based strictly on shared vibes. No judgment, just the excitement of meeting someone new.</p>
+
+        <!-- Default Google SSO state -->
+        <div id="google-login-box">
+          <a href="/auth/google" class="btn-primary" style="display:block; text-align:center; text-decoration:none;">Continue with KGP Email</a>
+          <div class="error-msg" id="auth-error" aria-live="polite" style="margin-top:10px;"></div>
+        </div>
+
+        <!-- Profile Completion state (Hidden unless redirected) -->
+        <form id="complete-profile-form" class="auth-form hidden" novalidate>
+          <p style="font-size: 0.85rem; color: var(--text2); margin-bottom: 1rem;">Setup your campus profile to finish!</p>
+          <div class="form-group">
+            <label for="su-nick">Nickname</label>
+            <input type="text" id="su-nick" name="su-nick" placeholder="What should we call you?" maxlength="20" required />
+          </div>
+          <div class="form-group">
+            <label for="su-gender">Gender</label>
+            <select id="su-gender" name="su-gender" required>
+              <option value="">Select</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Non-binary">Non-binary</option>
+              <option value="Prefer not to say">Prefer not to say</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="su-age">Age</label>
+            <select id="su-age" name="su-age" required>
+              <option value="">Select</option>
+              <option>17</option><option>18</option><option>19</option><option>20</option>
+              <option>21</option><option>22</option><option>23</option><option>24</option>
+              <option>25</option><option>26</option><option>27</option><option>28</option>
+            </select>
+          </div>
+          <div class="error-msg" id="su-error" aria-live="polite"></div>
+          <button type="submit" class="btn-primary" id="sign-up-btn">Complete Account</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Internal App -->
+    <section id="screen-app" class="screen" aria-labelledby="app-title">
+      <header class="topbar">
+        <span id="app-title" class="topbar-logo">meeter</span>
+        <div class="topbar-actions">
+          <button type="button" class="theme-toggle" id="theme-toggle-btn" title="Toggle Theme">☀️</button>
+          <span class="credits-badge" aria-live="polite">
+            <span class="credits-icon">✦</span>
+            <span id="credits-display">...</span> credits
+          </span>
+          <button type="button" class="user-chip" id="logout-button">
+            <span class="avatar-circle" id="user-avatar">?</span>
+            <span id="user-nickname">—</span>
+          </button>
+        </div>
+      </header>
+
+      <nav class="nav-tabs" role="tablist">
+        <button type="button" class="nav-tab active" data-tab="home">Meet</button>
+        <button type="button" class="nav-tab" data-tab="mymeets">My Meets</button>
+        <button type="button" class="nav-tab" data-tab="leaderboard">Credits</button>
+      </nav>
+
+      <section id="tab-home" class="tab-content active" role="tabpanel">
+        <div class="hero-section">
+          <h2 class="animate-float">Embrace the mystery,<br />meet awesome KGPians.</h2>
+          <p>We schedule completely anonymous meets based strictly on your interests. No names, no profiling—just an actual time, place, and the thrill of discovering who you'll meet.</p>
+        </div>
+
+        <p class="section-label centered">Choose your vibe</p>
+        <div class="meet-options">
+          <button type="button" class="meet-card" id="opt-solo">
+            <div class="meet-card-icon">👤</div>
+            <div class="meet-card-title">1-on-1</div>
+            <div class="meet-card-desc">Meet one person with similar interests</div>
+          </button>
+          <button type="button" class="meet-card" id="opt-squad">
+            <div class="meet-card-icon">👥</div>
+            <div class="meet-card-title">Squad of 4</div>
+            <div class="meet-card-desc">Get matched into a group of 4 people</div>
+          </button>
+        </div>
+
+        <p class="section-label centered">Pick up to 2 interests</p>
+        <div class="tags-grid" id="tags-container"></div>
+        <p id="home-error" class="error-msg centered" aria-live="polite"></p>
+        <button type="button" class="find-btn" id="find-btn">Find a Meet →</button>
+      </section>
+
+      <section id="tab-mymeets" class="tab-content" role="tabpanel">
+        <div id="meets-container"></div>
+      </section>
+
+      <section id="tab-leaderboard" class="tab-content" role="tabpanel">
+        <div class="stats-grid" id="stats-grid"></div>
+        <p class="section-label">Campus Leaderboard</p>
+        <div id="lb-list"></div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h4 class="footer-title">About</h4>
+        <p class="footer-text">Our vision at Meeter is to cut through the exhausting digital noise and online profiling. We facilitate totally anonymous, interest-based meetups—connecting the campus through real conversations and genuine excitement without preconceptions.</p>
+      </div>
+      <div class="footer-section" style="flex: 0.5;">
+        <h4 class="footer-title">Connect</h4>
+        <div class="social-icons">
+          <a href="#" class="social-icon" aria-label="Email">✉️</a>
+          <a href="#" class="social-icon" aria-label="LinkedIn">💼</a>
+          <a href="#" class="social-icon" aria-label="Instagram">📸</a>
+          <a href="#" class="social-icon" aria-label="GitHub">💻</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div class="modal-overlay" id="match-modal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="match-modal-title">
+      <div style="text-align:center;margin-bottom:1.5rem;">
+        <div style="font-size:2.5rem;margin-bottom:0.5rem;">🎉</div>
+        <h3 id="match-modal-title" class="modal-title">You've been matched!</h3>
+        <p class="modal-subtitle" id="match-modal-subtitle">Here are your meet details</p>
+      </div>
+      <div id="match-modal-details"></div>
+      <div class="modal-actions">
+        <button type="button" class="btn-outline" id="close-modal-button">Close</button>
+        <button type="button" class="btn-primary" id="modal-confirm-button">Got it!</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
