@@ -1,5 +1,6 @@
 const Meet = require('../models/Meet');
 const User = require('../models/User');
+const { sendMatchEmail } = require('./mailer');
 
 const VENUES = [
   'New Tikka', 'Pepsi Cut', 'Gymkhana Backside', 'Nehru Museum', 'Technology Club Park',
@@ -59,6 +60,10 @@ async function finalizeMeet(meetArray) {
   finalMeet.date = generateDate();
   
   await finalMeet.save();
+  
+  // Asynchronously dispatch beautiful emails to all participants
+  sendMatchEmail(finalMeet).catch(e => console.error(e));
+  
   return finalMeet;
 }
 

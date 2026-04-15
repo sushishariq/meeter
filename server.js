@@ -10,8 +10,8 @@ const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/meeter-db'
 
 app.use(cors());
 app.use(express.json());
-
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
 // Database Connection
 mongoose.connect(MONGO_URI)
   .then(() => console.log('✅ Connected to MongoDB'))
@@ -23,6 +23,7 @@ app.use(session({
   secret: process.env.SESSION_SECRET || 'a_secret_fallback_do_not_use_in_prod',
   resave: false,
   saveUninitialized: false,
+  store: MongoStore.create({ mongoUrl: MONGO_URI }),
   cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 } // 24 hours
 }));
 

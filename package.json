@@ -4,18 +4,21 @@
   "description": "Meeter is an exclusive meetup and matchmaking platform designed purely for the students of IIT Kharagpur. The platform removes the endless loop of online chatting and gets straight to the point: matching you with like-minded KGPians and automatically scheduling a time and place to meet on campus.",
   "main": "app.js",
   "scripts": {
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "connect-mongo": "^6.0.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "express-session": "^1.19.0",
     "mongoose": "^9.4.1",
     "node-cron": "^4.2.1",
+    "nodemailer": "^8.0.5",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0"
   }
