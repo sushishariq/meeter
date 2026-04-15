@@ -11,7 +11,7 @@ const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/meeter-db'
 app.use(cors());
 app.use(express.json());
 const session = require('express-session');
-const MongoStore = require('connect-mongo');
+const MongoStore = require('connect-mongo').default;
 // Database Connection
 mongoose.connect(MONGO_URI)
   .then(() => console.log('✅ Connected to MongoDB'))
